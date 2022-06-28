@@ -2,7 +2,7 @@
 * @Author: Giannis
 * @Date:   2022-06-28 00:40:49
 * @Last Modified by:   Giannis
-* @Last Modified time: 2022-06-28 23:54:28
+* @Last Modified time: 2022-06-29 01:00:27
 */
 
 #include "vk_odyssey.h"
@@ -34,10 +34,15 @@ static void vk_init(pVkOdyssey odyssey, HINSTANCE hInstance, HWND hwnd)
     {
         ODS_ASSERT(0);
     }
+
+    vk_create_device(odyssey);
 }
 
 static void vk_deinit(pVkOdyssey odyssey)
 {
+    vkDeviceWaitIdle(odyssey->device);
+
+    vkDestroyDevice(odyssey->device, 0);
     vkDestroySurfaceKHR(odyssey->instance, odyssey->surface, 0);
     vkDestroyDebugUtilsMessengerEXT(odyssey->instance, odyssey->debug_messenger, VK_NULL_HANDLE);
     vkDestroyInstance(odyssey->instance, VK_NULL_HANDLE);
@@ -82,4 +87,51 @@ static void vk_create_instance(pVkOdyssey odyssey)
 
     VK_ASSERT(vkCreateDebugUtilsMessengerEXT(odyssey->instance, &debug_utils_messenger_create_info,
         VK_NULL_HANDLE, &odyssey->debug_messenger));
+}
+
+
+static void vk_create_device(pVkOdyssey odyssey)
+{
+    uint32_t result = get_graphics_queue_family(odyssey->physical_device, odyssey->surface,
+        &odyssey->graphics_queue_index);
+
+    if(result == 1)
+    {
+        ODS_ASSERT(0);
+    }
+
+    float queue_priority = 1.0f;
+
+    VkDeviceQueueCreateInfo device_graphics_queue_create_info = {};
+    device_graphics_queue_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    device_graphics_queue_create_info.pNext = 0;
+    device_graphics_queue_create_info.flags = 0;
+    device_graphics_queue_create_info.queueFamilyIndex = odyssey->graphics_queue_index;
+    device_graphics_queue_create_info.queueCount = 1;
+    device_graphics_queue_create_info.pQueuePriorities = &queue_priority;
+
+    VkDeviceQueueCreateInfo device_queue_create_infos[] = {
+        device_graphics_queue_create_info
+    };
+
+    VkPhysicalDeviceFeatures physical_device_features = {};
+
+    VkDeviceCreateInfo device_create_info = {};
+    device_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    device_create_info.pNext = 0;
+    device_create_info.flags = 0;
+    device_create_info.queueCreateInfoCount = ArraySize(device_queue_create_infos);
+    device_create_info.pQueueCreateInfos = &device_queue_create_infos[0];
+    // Device layers are deprecated.
+    device_create_info.enabledLayerCount = ArraySize(device_layers_list);
+    device_create_info.ppEnabledLayerNames = &device_layers_list[0];
+    device_create_info.enabledExtensionCount = ArraySize(device_extensions_list);
+    device_create_info.ppEnabledExtensionNames = &device_extensions_list[0];
+    device_create_info.pEnabledFeatures = &physical_device_features;
+
+    VK_ASSERT(vkCreateDevice(odyssey->physical_device, &device_create_info, VK_NULL_HANDLE, &odyssey->device));
+
+    LOAD_VK_DEVICE_FUNCTIONS(odyssey->device);
+
+    vkGetDeviceQueue(odyssey->device, odyssey->graphics_queue_index, 0, &odyssey->graphics_queue);
 }

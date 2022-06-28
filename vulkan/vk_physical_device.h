@@ -42,4 +42,50 @@ static uint32_t vk_pick_physical_device(VkInstance instance, VkPhysicalDevice *g
     return 1;
 }
 
+// Get a graphics queue index that supports presentation to a chosen surface.
+static uint32_t get_graphics_queue_family(VkPhysicalDevice physical_device, VkSurfaceKHR surface,
+    uint32_t *graphics_queue_index)
+{
+    uint32_t queue_families_count;
+    vkGetPhysicalDeviceQueueFamilyProperties(physical_device, &queue_families_count, 0);
+
+    ods::vector<VkQueueFamilyProperties> queue_family_properties(queue_families_count);
+
+    vkGetPhysicalDeviceQueueFamilyProperties(physical_device, &queue_families_count, queue_family_properties.data());
+
+    uint32_t current_index = 0;
+
+    VkBool32 is_supported = VK_FALSE;
+
+    for(VkQueueFamilyProperties queue_family_property : queue_family_properties)
+    {
+        // VkQueueFlags
+        // 1. VK_QUEUE_GRAPHICS_BIT
+        // 2. VK_QUEUE_COMPUTE_BIT
+        // 3. VK_QUEUE_TRANSFER_BIT
+        // 4. VK_QUEUE_SPARSE_BINDING_BIT
+        // 5. VK_QUEUE_PROTECTED_BIT // 1.1 version
+        //
+        // #ifdef VK_ENABLE_BETA_EXTENSIONS
+        // 6. VK_QUEUE_VIDEO_DECODE_BIT_KHR // VK_KHR_video_decode_queue
+        // 7. VK_QUEUE_VIDEO_ENCODE_BIT_KHR // VK_KHR_video_encode_queue
+        // #endif
+
+        if(queue_family_property.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+        {
+
+            vkGetPhysicalDeviceSurfaceSupportKHR(physical_device, current_index, surface, &is_supported);
+            if(is_supported == VK_TRUE)
+            {
+                *graphics_queue_index = current_index;
+                return 0;
+            }
+        }
+
+        ++current_index;
+    }
+
+    return 1;
+}
+
 #endif

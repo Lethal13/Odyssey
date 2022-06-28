@@ -58,6 +58,15 @@ typedef struct VkOdyssey
     VkDebugUtilsMessengerEXT debug_messenger; // Handles debug messages (validation layers).
     VkPhysicalDevice physical_device; // Represents a single complete implementation of Vulkan available to host.
     VkSurfaceKHR surface;
+    VkDevice device; // Represents an instance of that implementation (VkPhysicalDevice) with its own
+    // state and resources independent of the other logical devices. It's the primary interface to the
+    // physical device.
+
+    // Graphics queue that must support presentation to a given surface.
+    VkQueue graphics_queue;
+
+    // graphics queue index that supports presentation to a chosen surface.
+    uint32_t graphics_queue_index;
 } VkOdyssey, *pVkOdyssey;
 
 static VkBool32 VKAPI_PTR
@@ -67,5 +76,6 @@ static void vk_init(pVkOdyssey, HINSTANCE hInstance, HWND hwnd);
 static void vk_deinit(pVkOdyssey);
 
 static void vk_create_instance(pVkOdyssey);
+static void vk_create_device(pVkOdyssey);
 
 #endif

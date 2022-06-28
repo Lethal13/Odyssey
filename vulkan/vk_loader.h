@@ -31,6 +31,7 @@ VK_GLOBAL_LEVEL_FUNCTION( vkEnumerateInstanceLayerProperties )
 VK_GLOBAL_LEVEL_FUNCTION( vkCreateInstance )
 #undef VK_GLOBAL_LEVEL_FUNCTION
 
+VK_INSTANCE_LEVEL_FUNCTION( vkGetDeviceProcAddr )
 VK_INSTANCE_LEVEL_FUNCTION( vkDestroyInstance )
 VK_INSTANCE_LEVEL_FUNCTION( vkEnumeratePhysicalDevices )
 VK_INSTANCE_LEVEL_FUNCTION( vkGetPhysicalDeviceProperties )
@@ -42,8 +43,13 @@ VK_INSTANCE_LEVEL_FUNCTION( vkDestroyDebugUtilsMessengerEXT ) // VK_EXT_DEBUG_UT
 VK_INSTANCE_LEVEL_FUNCTION( vkCreateWin32SurfaceKHR ) // VK_KHR_WIN32_SURFACE_EXTENSION_NAME
 VK_INSTANCE_LEVEL_FUNCTION( vkDestroySurfaceKHR ) // VK_KHR_SURFACE_EXTENSION_NAME
 VK_INSTANCE_LEVEL_FUNCTION( vkGetPhysicalDeviceSurfaceSupportKHR ) // VK_KHR_SURFACE_EXTENSION_NAME
+
+VK_INSTANCE_LEVEL_FUNCTION( vkCreateDevice )
 #undef VK_INSTANCE_LEVEL_FUNCTION
 
+VK_DEVICE_LEVEL_FUNCTION( vkGetDeviceQueue )
+VK_DEVICE_LEVEL_FUNCTION( vkDestroyDevice )
+VK_DEVICE_LEVEL_FUNCTION( vkDeviceWaitIdle )
 #undef VK_DEVICE_LEVEL_FUNCTION
 
 static VkResult LOAD_VULKAN(void)
@@ -69,20 +75,24 @@ static void LOAD_VK_GLOBAL_FUNCTIONS(void)
 
 static void LOAD_VK_INSTANCE_FUNCTIONS(VkInstance instance)
 {
+    vkGetDeviceProcAddr = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkGetDeviceProcAddr )
     vkDestroyInstance = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkDestroyInstance )
-    vkEnumeratePhysicalDevices = VK_INSTANCE_LEVEL_FUNCTION_LOAD(instance, vkEnumeratePhysicalDevices )
-    vkGetPhysicalDeviceProperties = VK_INSTANCE_LEVEL_FUNCTION_LOAD(instance, vkGetPhysicalDeviceProperties )
-    vkGetPhysicalDeviceQueueFamilyProperties = VK_INSTANCE_LEVEL_FUNCTION_LOAD(instance, vkGetPhysicalDeviceQueueFamilyProperties )
-    vkCreateDebugUtilsMessengerEXT = VK_INSTANCE_LEVEL_FUNCTION_LOAD(instance, vkCreateDebugUtilsMessengerEXT )
-    vkDestroyDebugUtilsMessengerEXT = VK_INSTANCE_LEVEL_FUNCTION_LOAD(instance, vkDestroyDebugUtilsMessengerEXT )
-    vkCreateWin32SurfaceKHR = VK_INSTANCE_LEVEL_FUNCTION_LOAD(instance, vkCreateWin32SurfaceKHR )
-    vkDestroySurfaceKHR = VK_INSTANCE_LEVEL_FUNCTION_LOAD(instance, vkDestroySurfaceKHR )
-    vkGetPhysicalDeviceSurfaceSupportKHR = VK_INSTANCE_LEVEL_FUNCTION_LOAD(instance, vkGetPhysicalDeviceSurfaceSupportKHR )
+    vkEnumeratePhysicalDevices = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkEnumeratePhysicalDevices )
+    vkGetPhysicalDeviceProperties = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkGetPhysicalDeviceProperties )
+    vkGetPhysicalDeviceQueueFamilyProperties = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkGetPhysicalDeviceQueueFamilyProperties )
+    vkCreateDebugUtilsMessengerEXT = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkCreateDebugUtilsMessengerEXT )
+    vkDestroyDebugUtilsMessengerEXT = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkDestroyDebugUtilsMessengerEXT )
+    vkCreateWin32SurfaceKHR = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkCreateWin32SurfaceKHR )
+    vkDestroySurfaceKHR = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkDestroySurfaceKHR )
+    vkGetPhysicalDeviceSurfaceSupportKHR = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkGetPhysicalDeviceSurfaceSupportKHR )
+    vkCreateDevice = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkCreateDevice )
 }
 
 static void LOAD_VK_DEVICE_FUNCTIONS(VkDevice device)
 {
-
+    vkGetDeviceQueue = VK_DEVICE_LEVEL_FUNCTION_LOAD( device, vkGetDeviceQueue )
+    vkDestroyDevice = VK_DEVICE_LEVEL_FUNCTION_LOAD( device, vkDestroyDevice  )
+    vkDeviceWaitIdle = VK_DEVICE_LEVEL_FUNCTION_LOAD( device, vkDeviceWaitIdle )
 }
 
 #endif
