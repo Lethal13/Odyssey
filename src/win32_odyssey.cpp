@@ -2,7 +2,7 @@
 * @Author: Giannis
 * @Date:   2022-06-26 17:45:38
 * @Last Modified by:   Giannis
-* @Last Modified time: 2022-06-26 20:19:05
+* @Last Modified time: 2022-06-28 06:47:54
 */
 
 #include "odyssey.h"
@@ -13,8 +13,6 @@ LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
-    //Note: 1080p display mode is 1920x1080 -> Half of that is 960x540
-    //Note: Usually you want texture size to be power of 2 for gpu reasons.
     //Register the window class.
     WNDCLASS WindowClass = {};
     WindowClass.lpfnWndProc = WindowProc;
@@ -44,6 +42,16 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         return -1;
     }
 
+    if(!(LOAD_VULKAN() == VK_SUCCESS))
+    {
+        return -1;
+    }
+
+    LOAD_VK_GLOBAL_FUNCTIONS();
+
+    VkOdyssey vk_odyssey = {};
+    vk_init(&vk_odyssey, hInstance, hwnd);
+
     ShowWindow(hwnd, nCmdShow);
 
     MSG message = {};
@@ -66,6 +74,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
             break;
         }
     }
+
+    vk_deinit(&vk_odyssey);
 
     return 0;
 }
