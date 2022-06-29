@@ -67,6 +67,11 @@ typedef struct VkOdyssey
 
     // graphics queue index that supports presentation to a chosen surface.
     uint32_t graphics_queue_index;
+
+    VkWSI wsi[2];
+
+    uint32_t current_frame_index;
+    uint32_t current_wsi_index;
 } VkOdyssey, *pVkOdyssey;
 
 static VkBool32 VKAPI_PTR

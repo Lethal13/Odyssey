@@ -2,7 +2,7 @@
 * @Author: Giannis
 * @Date:   2022-06-28 00:40:49
 * @Last Modified by:   Giannis
-* @Last Modified time: 2022-06-29 01:00:27
+* @Last Modified time: 2022-06-29 03:52:15
 */
 
 #include "vk_odyssey.h"
@@ -36,11 +36,16 @@ static void vk_init(pVkOdyssey odyssey, HINSTANCE hInstance, HWND hwnd)
     }
 
     vk_create_device(odyssey);
+
+    vk_init_wsi(odyssey->surface, odyssey->physical_device, odyssey->device,
+        &odyssey->wsi[0], VK_NULL_HANDLE);
 }
 
 static void vk_deinit(pVkOdyssey odyssey)
 {
     vkDeviceWaitIdle(odyssey->device);
+
+    vk_deinit_wsi(odyssey->device, &odyssey->wsi[0]);
 
     vkDestroyDevice(odyssey->device, 0);
     vkDestroySurfaceKHR(odyssey->instance, odyssey->surface, 0);

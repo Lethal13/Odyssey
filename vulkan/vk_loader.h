@@ -43,13 +43,20 @@ VK_INSTANCE_LEVEL_FUNCTION( vkDestroyDebugUtilsMessengerEXT ) // VK_EXT_DEBUG_UT
 VK_INSTANCE_LEVEL_FUNCTION( vkCreateWin32SurfaceKHR ) // VK_KHR_WIN32_SURFACE_EXTENSION_NAME
 VK_INSTANCE_LEVEL_FUNCTION( vkDestroySurfaceKHR ) // VK_KHR_SURFACE_EXTENSION_NAME
 VK_INSTANCE_LEVEL_FUNCTION( vkGetPhysicalDeviceSurfaceSupportKHR ) // VK_KHR_SURFACE_EXTENSION_NAME
-
+VK_INSTANCE_LEVEL_FUNCTION( vkGetPhysicalDeviceSurfaceCapabilitiesKHR ) // VK_KHR_SURFACE_EXTENSION_NAME
+VK_INSTANCE_LEVEL_FUNCTION( vkGetPhysicalDeviceSurfaceFormatsKHR ) // VK_KHR_SURFACE_EXTENSION_NAME
+VK_INSTANCE_LEVEL_FUNCTION( vkGetPhysicalDeviceSurfacePresentModesKHR ) // VK_KHR_SURFACE_EXTENSION_NAME
 VK_INSTANCE_LEVEL_FUNCTION( vkCreateDevice )
 #undef VK_INSTANCE_LEVEL_FUNCTION
 
 VK_DEVICE_LEVEL_FUNCTION( vkGetDeviceQueue )
 VK_DEVICE_LEVEL_FUNCTION( vkDestroyDevice )
 VK_DEVICE_LEVEL_FUNCTION( vkDeviceWaitIdle )
+VK_DEVICE_LEVEL_FUNCTION( vkCreateSwapchainKHR ) // VK_KHR_swapchain.
+VK_DEVICE_LEVEL_FUNCTION( vkGetSwapchainImagesKHR ) // VK_KHR_swapchain.
+VK_DEVICE_LEVEL_FUNCTION( vkDestroySwapchainKHR ) // VK_KHR_swapchain.
+VK_DEVICE_LEVEL_FUNCTION( vkCreateImageView )
+VK_DEVICE_LEVEL_FUNCTION( vkDestroyImageView )
 #undef VK_DEVICE_LEVEL_FUNCTION
 
 static VkResult LOAD_VULKAN(void)
@@ -85,6 +92,9 @@ static void LOAD_VK_INSTANCE_FUNCTIONS(VkInstance instance)
     vkCreateWin32SurfaceKHR = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkCreateWin32SurfaceKHR )
     vkDestroySurfaceKHR = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkDestroySurfaceKHR )
     vkGetPhysicalDeviceSurfaceSupportKHR = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkGetPhysicalDeviceSurfaceSupportKHR )
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkGetPhysicalDeviceSurfaceCapabilitiesKHR )
+    vkGetPhysicalDeviceSurfaceFormatsKHR = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkGetPhysicalDeviceSurfaceFormatsKHR )
+    vkGetPhysicalDeviceSurfacePresentModesKHR = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkGetPhysicalDeviceSurfacePresentModesKHR )
     vkCreateDevice = VK_INSTANCE_LEVEL_FUNCTION_LOAD( instance, vkCreateDevice )
 }
 
@@ -93,6 +103,11 @@ static void LOAD_VK_DEVICE_FUNCTIONS(VkDevice device)
     vkGetDeviceQueue = VK_DEVICE_LEVEL_FUNCTION_LOAD( device, vkGetDeviceQueue )
     vkDestroyDevice = VK_DEVICE_LEVEL_FUNCTION_LOAD( device, vkDestroyDevice  )
     vkDeviceWaitIdle = VK_DEVICE_LEVEL_FUNCTION_LOAD( device, vkDeviceWaitIdle )
+    vkCreateSwapchainKHR = VK_DEVICE_LEVEL_FUNCTION_LOAD( device, vkCreateSwapchainKHR )
+    vkGetSwapchainImagesKHR = VK_DEVICE_LEVEL_FUNCTION_LOAD( device, vkGetSwapchainImagesKHR )
+    vkDestroySwapchainKHR = VK_DEVICE_LEVEL_FUNCTION_LOAD( device, vkDestroySwapchainKHR )
+    vkCreateImageView = VK_DEVICE_LEVEL_FUNCTION_LOAD( device, vkCreateImageView )
+    vkDestroyImageView = VK_DEVICE_LEVEL_FUNCTION_LOAD( device, vkDestroyImageView )
 }
 
 #endif

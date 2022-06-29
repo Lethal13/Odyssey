@@ -208,7 +208,7 @@ struct vector
         size_t vector_size = *(((size_t*)v.p_data) + 1);
 
         this->p_data = (T*)malloc(sizeof(T) * vector_capacity + sizeof(array_header));
-        ODS_ASSERT(new_block != 0);
+        ODS_ASSERT(this->p_data != 0);
         memset((char*)this->p_data, 0, sizeof(T) * vector_capacity + sizeof(array_header));
 
         // NOTE + TODO:
@@ -293,9 +293,9 @@ struct vector
 
         ODS_ASSERT(p_data != nullptr);
 
-        T *new_block = (T*)malloc(sizeof(T) * capacity + sizeof(array_header_t));
+        T *new_block = (T*)malloc(sizeof(T) * capacity + sizeof(array_header));
         ODS_ASSERT(new_block != 0);
-        memset((char*)new_block, 0, sizeof(T) * capacity + sizeof(array_header_t));
+        memset((char*)new_block, 0, sizeof(T) * capacity + sizeof(array_header));
 
         *(size_t*)new_block = capacity;
         *(((size_t*)new_block) + 1) = capacity;
@@ -303,7 +303,7 @@ struct vector
         // uint8_t *temp = (uint8_t*)p_data;
         // temp += sizeof(array_header_t);
 
-        memcpy(((uint8_t*)new_block + sizeof(array_header_t)), (((uint8_t*)p_data) + sizeof(array_header_t)), sizeof(T) * capacity);
+        memcpy(((uint8_t*)new_block + sizeof(array_header)), (((uint8_t*)p_data) + sizeof(array_header)), sizeof(T) * capacity);
 
         free(p_data);
         p_data = new_block;
