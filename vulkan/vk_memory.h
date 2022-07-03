@@ -1,0 +1,5 @@
+#ifndef ODYSSEY_VULKAN_VK_MEMORY_H
+#define ODYSSEY_VULKAN_VK_MEMORY_H
+
+
+#endif

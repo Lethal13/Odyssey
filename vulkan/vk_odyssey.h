@@ -2,7 +2,10 @@
 #define ODYSSEY_VULKAN_VK_ODYSSEY_H
 
 #include "../containers/vector.h"
-#include "../filesystem/win32_file.h"
+#include "../filesystem/file.h"
+
+#include "../math/vec2.h"
+#include "../math/vec3.h"
 
 #include "vk_loader.h"
 #include "vk_debug_utils.h"
