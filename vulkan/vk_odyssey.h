@@ -2,11 +2,14 @@
 #define ODYSSEY_VULKAN_VK_ODYSSEY_H
 
 #include "../containers/vector.h"
+#include "../filesystem/win32_file.h"
 
 #include "vk_loader.h"
 #include "vk_debug_utils.h"
 #include "vk_wsi.h"
 #include "vk_physical_device.h"
+#include "vk_render_pass.h"
+#include "vk_pipeline.h"
 
 // 1. TODO: Decouple Debug/Release Mode.
 // 2. Check if the requested extensions/layers are being supported.
@@ -70,8 +73,22 @@ typedef struct VkOdyssey
 
     VkWSI wsi[2];
 
-    uint32_t current_frame_index;
-    uint32_t current_wsi_index;
+    VkRenderPass render_pass; // Each render pass instance defines a set of image resourses.
+    // Defines the layout of the framebuffer and the transitions?
+    ods::vector<VkFramebuffer> swapchain_framebuffers;
+
+    GraphicsPipeline graphics_pipeline;
+
+    VkCommandPool command_pool;
+    ods::vector<VkCommandBuffer> command_buffers;
+
+    ods::vector<VkSemaphore> image_available_semaphores;
+    ods::vector<VkSemaphore> render_finished_semaphores;
+    ods::vector<VkFence> in_flight_fences;
+
+    uint32_t current_wsi;
+    uint32_t current_frame;
+    uint32_t total_frames;
 } VkOdyssey, *pVkOdyssey;
 
 static VkBool32 VKAPI_PTR
@@ -82,5 +99,15 @@ static void vk_deinit(pVkOdyssey);
 
 static void vk_create_instance(pVkOdyssey);
 static void vk_create_device(pVkOdyssey);
-
+static void vk_create_command_pool(VkDevice, VkCommandPool*, uint32_t);
+static void vk_create_command_buffers(VkDevice, VkCommandPool, ods::vector<VkCommandBuffer>&, uint32_t);
+static void vk_command_buffers_recording(VkCommandBuffer, VkRenderPass, VkFramebuffer,
+    VkExtent2D, VkPipeline);
+// https://github.com/KhronosGroup/Vulkan-Docs/wiki/Synchronization-Examples#swapchain-image-acquire-and-present
+static void vk_create_sync_objects(pVkOdyssey);
+static void vk_destroy_sync_objects(pVkOdyssey);
+static void vk_create_framebuffers(VkDevice, VkRenderPass, ods::vector<VkImageView>,
+    ods::vector<VkFramebuffer>&, VkExtent2D);
+static void vk_reinit_wsi(pVkOdyssey);
+static void vk_draw_frame();
 #endif

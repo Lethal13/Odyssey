@@ -2,7 +2,7 @@
 * @Author: Giannis
 * @Date:   2022-06-26 17:45:38
 * @Last Modified by:   Giannis
-* @Last Modified time: 2022-06-28 06:47:54
+* @Last Modified time: 2022-07-01 07:07:31
 */
 
 #include "odyssey.h"
@@ -73,6 +73,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         {
             break;
         }
+
+        vk_draw_frame(&vk_odyssey);
+
     }
 
     vk_deinit(&vk_odyssey);

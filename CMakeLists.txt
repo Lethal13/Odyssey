@@ -20,6 +20,7 @@ set(CLANG_CL_COMPILER_FLAGS "-g -O0 -Wall -Wextra -Werror")
 set(CLANG_CL_LINK_FLAGS "-incremental:no -opt:ref -machine:x64 -manifest:no -subsystem:WINDOWS")
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    # set_property(DIRECTORY "${CMAKE_SOURCE_DIR}" PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
     if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "Clang")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CLANG_CL_COMPILER_FLAGS}")
     else()
